@@ -13,7 +13,7 @@ export const db = Gun({
   localStorage: true,
 });
 
-export const user = db.user().recall({ sessionStorage: true });
+export const user = db.user();
 export const isLoggedin = writable(false);
 export const profilepic = writable("");
 export const username = writable("");
@@ -27,9 +27,15 @@ axios.get("https://freeipapi.com/api/json").then((response) => {
   console.log("user city set as", city);
 });
 
+if (localStorage.getItem("keys")) {
+  console.log("logging in");
+  db.user().auth(JSON.parse(localStorage.getItem("keys")));
+}
+
 db.on("auth", (ack) => {
   console.log("user logged in");
   userkeys.set(ack.sea);
+  localStorage.setItem("keys", JSON.stringify(ack.sea));
   isLoggedin.set(true);
   user.get("profilepic").on((pic) => {
     profilepic.set(pic);

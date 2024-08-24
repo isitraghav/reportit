@@ -45,6 +45,7 @@
       color="yellow"
       onClick={() => {
         db.user().leave();
+        localStorage.clear();
         f7router.navigate("/");
         location.reload();
       }}>LOG OUT</Button
