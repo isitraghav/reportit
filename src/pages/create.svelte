@@ -255,7 +255,12 @@
 
     {#if !loading}
       <List strongIos outlineIos insetIos>
-        <ListItem checkbox class="text-sm" bind:checked={nsfw} title="NSFW" />
+        <ListItem
+          checkbox
+          class="text-sm"
+          bind:checked={nsfw}
+          title="sensitive"
+        />
         <ListButton color="blue" on:click={submitEntry}>Submit</ListButton>
       </List>
     {/if}

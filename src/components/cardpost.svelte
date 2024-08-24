@@ -6,12 +6,13 @@
     Icon,
     f7,
     Link,
+    PhotoBrowser,
   } from "framework7-svelte";
   // import { db, user, userData } from "../js/database";
   export let p;
 
   import moment from "moment";
-  import { db, isLoggedin, userkeys, userstate } from "../js/database";
+  import { db, isLoggedin, user, userkeys, userstate } from "../js/database";
   // import { onMount } from "svelte";
 
   // let upvotes = p.upvotes || [];
@@ -69,7 +70,7 @@
   let upvotes = p.upvotes;
 
   function likePost() {
-    if (upvoted) {
+    if (upvoted == true) {
       return;
     }
     db.get(`${$userstate}upvote`)
@@ -81,8 +82,27 @@
         }
       });
 
+    user.get("upvotedposts").get(p.id).put(true);
+
     upvoted = true;
     upvotes = [...upvotes, $userkeys.pub];
+  }
+
+  function undolikePost() {
+    db.get(`${$userstate}upvote`)
+      .get(p.id)
+      .get($userkeys.pub)
+      .put(false, (ack) => {
+        if (ack.err) {
+          console.log(ack.err);
+        }
+      });
+
+    user.get("upvotedposts").get(p.id).put($userkeys.pub).put(false);
+
+    upvotes.pop();
+    console.log(upvotes);
+    upvoted = false;
   }
 
   userkeys.subscribe((data) => {
@@ -92,6 +112,13 @@
       }
     }
   });
+
+  let media = [];
+  if (p.hasOwnProperty("media")) {
+    media = p.media;
+  }
+
+  let popupDark;
 </script>
 
 <Card outline footerDivider>
@@ -122,6 +149,19 @@
   <p class="pl-4 mb-3 text-xs line-clamp-3">
     {p.content}
   </p>
+  <div class="flex gap-2 p-3 overflow-scroll">
+    {#each media as m}
+      <!-- svelte-ignore a11y-click-events-have-key-events -->
+      <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+      <!-- svelte-ignore missing-declaration -->
+      <img
+        on:click={() => popupDark.open()}
+        class="object-cover w-20 aspect-square rounded"
+        src={`${m}-/scale_crop/300x300/`}
+        alt=""
+      />
+    {/each}
+  </div>
   <CardFooter>
     <div class="flex gap-3">
       <button on:click={likePost}>
@@ -136,3 +176,11 @@
     </button> -->
   </CardFooter>
 </Card>
+
+<PhotoBrowser
+  photos={media}
+  theme="dark"
+  type="popup"
+  thumbs={media}
+  bind:this={popupDark}
+/>

@@ -6,6 +6,7 @@ import ProductPage from "../pages/product.svelte";
 import ProfilePage from "../pages/profile.svelte";
 import SettingsPage from "../pages/settings.svelte";
 import CreatePage from "../pages/create.svelte";
+import UpvotedPage from "../pages/upvoted.svelte";
 import UserProfilePage from "../pages/userprofile.svelte";
 
 import DynamicRoutePage from "../pages/dynamic-route.svelte";
@@ -20,6 +21,10 @@ var routes = [
   {
     path: "/profile/",
     component: ProfilePage,
+  },
+  {
+    path: "/upvoted/",
+    component: UpvotedPage,
   },
   {
     path: "/user/:id",

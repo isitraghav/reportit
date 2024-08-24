@@ -33,8 +33,6 @@
       // })
       .map()
       .once((a) => {
-        console.log(a);
-
         if (
           new Object(a).hasOwnProperty("version") &&
           !postids.includes(a.id)
@@ -42,10 +40,17 @@
           if (a.version !== 2) {
             return;
           }
-          console.log("none");
           db.get(`~${a.user}`)
             .get("alias")
             .once((name) => {
+              db.get(`~${a.user}`)
+                .get("media")
+                .get(a.id)
+                .once((media) => {
+                  if (media) {
+                    a.media = JSON.parse(media);
+                  }
+                });
               a.username = name;
               db.get(`${$userstate}upvote`)
                 .get(a.id)
@@ -80,13 +85,13 @@
 
   function filter() {
     posts = posts
-      //   .filter(
-      //     (value, index, self) =>
-      //       index ===
-      //       self.findIndex(
-      //         (t) => t.title === value.title && t.content === value.content
-      //       )
-      //   )
+      .filter(
+        (value, index, self) =>
+          index ===
+          self.findIndex(
+            (t) => t.title === value.title && t.content === value.content
+          )
+      )
       .sort(
         (a, b) =>
           new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
