@@ -18,37 +18,63 @@
   } from "framework7-svelte";
   import { db, userstate } from "../js/database";
   import Cardpost from "../components/cardpost.svelte";
+  import NoPostCard from "../components/nopostscard.svelte";
 
   let posts = [];
   let postids = [];
 
+  function loadResource(done) {
+    db.get($userstate)
+      // .map({
+      //   ".": {
+      //     // "<": new Date().toISOString(),
+      //     ">": new Date(+new Date() - 24 * 60 * 60 * 1000).toISOString(),
+      //   },
+      // })
+      .map()
+      .once((a) => {
+        console.log(a);
+
+        if (
+          new Object(a).hasOwnProperty("version") &&
+          !postids.includes(a.id)
+        ) {
+          if (a.version !== 2) {
+            return;
+          }
+          console.log("none");
+          db.get(`~${a.user}`)
+            .get("alias")
+            .once((name) => {
+              a.username = name;
+              db.get(`${$userstate}upvote`)
+                .get(a.id)
+                .once((upvotes) => {
+                  if (!upvotes) {
+                    upvotes = [];
+                  }
+                  let upvote_array = [];
+                  delete upvotes._;
+                  Object.entries(upvotes).forEach(([key, value]) => {
+                    if (value) {
+                      upvote_array = [...upvote_array, key];
+                    }
+                  });
+                  a.upvotes = upvote_array;
+
+                  postids = [...postids, a.id];
+                  posts = [a, ...posts];
+                });
+            });
+        } else {
+          console.log("no of posts with no versions");
+        }
+      });
+    done();
+  }
   userstate.subscribe((data) => {
     if (data) {
-      db.get(data)
-        .map({
-          ".": {
-            // "<": new Date().toISOString(),
-            ">": new Date(+new Date() - 24 * 60 * 60 * 1000).toISOString(),
-          },
-        })
-        // .map()
-        .once((a) => {
-          if (
-            new Object(a).hasOwnProperty("version") &&
-            !postids.includes(a.id)
-          ) {
-            if (a.version !== 1) {
-              return;
-            }
-            db.get(`~${a.user}`)
-              .get("alias")
-              .once((name) => {
-                a.username = name;
-                postids = [...postids, a.id];
-                posts = [a, ...posts];
-              });
-          }
-        });
+      loadResource(() => {});
     }
   });
 
@@ -70,7 +96,7 @@
   $: posts, filter();
 </script>
 
-<Page name="home">
+<Page name="home" ptr onPtrRefresh={loadResource}>
   <Navbar title="Report.It">
     <NavRight>
       <Button onClick={() => f7.views.main.router.navigate("/profile/")}>
@@ -81,7 +107,9 @@
   <div class="ml-3 mt-3">
     Viewing crimes in : {$userstate}
   </div>
-
+  {#if posts.length === 0}
+    <NoPostCard />
+  {/if}
   {#each posts as post}
     {#key post.id}
       <Cardpost p={post} />

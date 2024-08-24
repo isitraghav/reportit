@@ -1,13 +1,16 @@
 import axios from "axios";
 import Gun from "gun/gun";
+// import "gun/axe";
+// import "gun/lib/store";
+// import "gun/lib/radix";
+// import "gun/lib/radisk";
+// import "gun/lib/rindexed";
 import "gun/sea";
 import { writable } from "svelte/store";
 
 export const db = Gun({
-  peers: [
-    "https://peer.wallie.io/gun",
-    "https://gun-manhattan.herokuapp.com/gun",
-  ],
+  peers: ["https://peer.wallie.io/gun"],
+  localStorage: true,
 });
 
 export const user = db.user().recall({ sessionStorage: true });
@@ -18,11 +21,8 @@ export const userstate = writable("");
 export const posts = writable([]);
 export const userkeys = writable();
 
-// db.user().create("admin123123", "admin123123");
-// db.user().auth("admin123123", "admin123123", true);
-
 axios.get("https://freeipapi.com/api/json").then((response) => {
-  let city = "Haryana" || response.data.regionName;
+  let city = response.data.regionName;
   userstate.set(city);
   console.log("user city set as", city);
 });
@@ -31,7 +31,7 @@ db.on("auth", (ack) => {
   console.log("user logged in");
   userkeys.set(ack.sea);
   isLoggedin.set(true);
-  user.get("profilepic").once((pic) => {
+  user.get("profilepic").on((pic) => {
     profilepic.set(pic);
   });
 
@@ -43,6 +43,7 @@ db.on("auth", (ack) => {
     .get("posts")
     .map()
     .once((post) => {
+      console.log("okok");
       console.log(post);
     });
 });

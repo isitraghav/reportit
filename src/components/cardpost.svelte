@@ -9,7 +9,9 @@
   } from "framework7-svelte";
   // import { db, user, userData } from "../js/database";
   export let p;
+
   import moment from "moment";
+  import { db, isLoggedin, userkeys, userstate } from "../js/database";
   // import { onMount } from "svelte";
 
   // let upvotes = p.upvotes || [];
@@ -64,9 +66,32 @@
   // $: upvotes, filter();
 
   let upvoted = false;
-  let upvotes = [];
+  let upvotes = p.upvotes;
 
-  function likePost() {}
+  function likePost() {
+    if (upvoted) {
+      return;
+    }
+    db.get(`${$userstate}upvote`)
+      .get(p.id)
+      .get($userkeys.pub)
+      .put(true, (ack) => {
+        if (ack.err) {
+          console.log(ack.err);
+        }
+      });
+
+    upvoted = true;
+    upvotes = [...upvotes, $userkeys.pub];
+  }
+
+  userkeys.subscribe((data) => {
+    if (data) {
+      if (upvotes.includes(data.pub)) {
+        upvoted = true;
+      }
+    }
+  });
 </script>
 
 <Card outline footerDivider>
@@ -83,10 +108,8 @@
         </div>
         <div class="ml-auto uppercase mr-2">
           {#if p.nsfw}
-            <span
-              class="px-2 py-1 rounded-full text-xs bg-[#8e1c1c] text-white"
-            >
-              nsfw
+            <span class="text-red-600">
+              <Icon ios="f7:eye_slash_fill" size="20px" />
             </span>
           {/if}
         </div>
@@ -108,8 +131,8 @@
         {/if}
       </button>
     </div>
-    <button class="ml-auto w-10">
+    <!-- <button class="ml-auto w-10">
       <Icon ios="f7:bubble_middle_bottom_fill" size="20px" />
-    </button>
+    </button> -->
   </CardFooter>
 </Card>

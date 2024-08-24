@@ -8,8 +8,8 @@
   "scripts": {
     "start": "npm run dev",
     "dev": "cross-env NODE_ENV=development vite",
-    "build": "cross-env NODE_ENV=production vite build",
-    "build-capacitor-android": "cross-env NODE_ENV=production vite build && npx cap copy android",
+    "build-vite": "cross-env NODE_ENV=production vite build",
+    "build": "cross-env NODE_ENV=production vite build && npx cap copy android",
     "postinstall": "cpy --flat ./node_modules/framework7-icons/fonts/*.* ./src/fonts/ && cpy --flat ./node_modules/material-icons/iconfont/*.* ./src/fonts/"
   },
   "browserslist": [
@@ -29,6 +29,7 @@
     "@uploadcare/upload-client": "^6.14.1",
     "axios": "^1.7.5",
     "dom7": "^4.0.6",
+    "eruda": "^3.2.3",
     "framework7": "^8.3.3",
     "framework7-icons": "^5.0.5",
     "framework7-svelte": "^8.3.3",
@@ -41,6 +42,7 @@
     "uuid": "^10.0.0"
   },
   "devDependencies": {
+    "@capacitor/assets": "^3.0.5",
     "@capacitor/cli": "^6.1.2",
     "@sveltejs/vite-plugin-svelte": "^3.1.2",
     "autoprefixer": "^10.4.20",

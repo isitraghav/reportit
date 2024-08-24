@@ -118,7 +118,7 @@
       nsfw: nsfw,
       id: id,
       user: $userkeys.pub,
-      version: 1,
+      version: 2,
     };
 
     user
@@ -143,12 +143,17 @@
         }
       });
 
-    uploadingPost = false;
-    content = "";
-    nsfw = false;
-    fileids = [];
-    loading = false;
-    fileuploadprogress = 0;
+    user
+      .get("posts")
+      .get(id)
+      .put(messageData, (ack) => {
+        uploadingPost = false;
+        content = "";
+        nsfw = false;
+        fileids = [];
+        loading = false;
+        fileuploadprogress = 0;
+      });
   }
 
   const onProgress = ({ isComputable, value }) => {

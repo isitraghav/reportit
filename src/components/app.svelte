@@ -1,4 +1,6 @@
 <script>
+  import eruda from "eruda";
+  eruda.init();
   import { onMount } from "svelte";
   import { getDevice } from "framework7/lite-bundle";
   import {
@@ -40,7 +42,6 @@
       primary: "#007aff",
     },
     darkMode: true,
-
     // App store
     store: store,
     // App routes
@@ -104,7 +105,7 @@
       />
       <Link
         tabLink="#view-plus"
-        iconIos="f7:plus"
+        iconIos="f7:plus_square"
         iconMd="material:view_list"
         text="Create"
       />
