@@ -23,11 +23,13 @@
     ListInput,
     ListButton,
     BlockFooter,
+    Button,
   } from "framework7-svelte";
 
   import capacitorApp from "../js/capacitor-app";
   import routes from "../js/routes";
   import store from "../js/store";
+  import { db, isLoggedin } from "../js/database";
 
   const device = getDevice();
   // Framework7 Parameters
@@ -59,14 +61,6 @@
   let username = "";
   let password = "";
 
-  function alertLoginData() {
-    f7.dialog.alert(
-      "Username: " + username + "<br>Password: " + password,
-      () => {
-        f7.loginScreen.close();
-      }
-    );
-  }
   onMount(() => {
     f7ready(() => {
       // Init capacitor APIs (see capacitor-app.js)
@@ -76,6 +70,25 @@
       // Call F7 APIs here
     });
   });
+
+  function signin() {
+    db.user().auth(username, password, (ack) => {
+      if (ack.err) {
+        f7.dialog.alert(ack.err);
+      } else {
+      }
+    });
+  }
+
+  function signup() {
+    db.user().create(username, password, (ack) => {
+      if (ack.err) {
+        f7.dialog.alert(ack.err);
+      } else {
+        signin();
+      }
+    });
+  }
 </script>
 
 <App {...f7params}>
@@ -90,10 +103,10 @@
         text="Home"
       />
       <Link
-        tabLink="#view-catalog"
-        iconIos="f7:square_list_fill"
+        tabLink="#view-plus"
+        iconIos="f7:plus"
         iconMd="material:view_list"
-        text="Catalog"
+        text="Create"
       />
       <Link
         tabLink="#view-settings"
@@ -107,16 +120,16 @@
     <View id="view-home" main tab tabActive url="/" />
 
     <!-- Catalog View -->
-    <View id="view-catalog" name="catalog" tab url="/catalog/" />
+    <View id="view-plus" name="plus" tab url="/create/" />
 
     <!-- Settings View -->
     <View id="view-settings" name="settings" tab url="/settings/" />
   </Views>
 
-  <LoginScreen id="my-login-screen">
+  <LoginScreen id="my-login-screen" opened={!$isLoggedin}>
     <View>
       <Page loginScreen>
-        <LoginScreenTitle>Login</LoginScreenTitle>
+        <LoginScreenTitle>Report.It</LoginScreenTitle>
         <List form>
           <ListInput
             type="text"
@@ -131,12 +144,12 @@
             bind:value={password}
           />
         </List>
-        <List>
-          <ListButton title="Sign In" onClick={() => alertLoginData()} />
-        </List>
+        <div class="flex justify-center">
+          <Button title="Sign Up" onClick={() => signup()}>Sign Up</Button>
+          <Button fill title="Sign In" onClick={() => signin()}>Sign In</Button>
+        </div>
         <BlockFooter>
-          Some text about login information.<br />Click "Sign In" to close Login
-          Screen
+          By logging in or signing up you agree to our terms and conditions
         </BlockFooter>
       </Page>
     </View>
