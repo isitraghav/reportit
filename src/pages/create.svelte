@@ -118,7 +118,7 @@
       nsfw: nsfw,
       id: id,
       user: $userkeys.pub,
-      version: 2,
+      version: 3,
     };
 
     user

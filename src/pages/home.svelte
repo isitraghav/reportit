@@ -37,7 +37,7 @@
           new Object(a).hasOwnProperty("version") &&
           !postids.includes(a.id)
         ) {
-          if (a.version !== 2) {
+          if (a.version !== 3) {
             return;
           }
           db.get(`~${a.user}`)
