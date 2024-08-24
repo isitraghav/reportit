@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">reportit</string>
+    <string name="title_activity_main">reportit</string>
+    <string name="package_name">com.reportit.app</string>
+    <string name="custom_url_scheme">com.reportit.app</string>
+</resources>
