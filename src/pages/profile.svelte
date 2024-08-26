@@ -17,6 +17,7 @@
   } from "framework7-svelte";
   import { db, user, profilepic, username } from "../js/database";
   import Nopostscard from "../components/nopostscard.svelte";
+  import Cardpost from "../components/cardpost.svelte";
 
   let posts = [];
   let profilepic_graph;
@@ -124,7 +125,7 @@
     {/if}
     {#each posts as p}
       {#key p.id}
-        <!-- <Card {p} /> -->
+        <Cardpost {p} />
       {/key}
     {/each}
   </div>

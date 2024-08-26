@@ -1,6 +1,4 @@
 <script>
-  import eruda from "eruda";
-  eruda.init();
   import { onMount } from "svelte";
   import { getDevice } from "framework7/lite-bundle";
   import {

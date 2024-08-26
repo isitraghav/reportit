@@ -43,32 +43,38 @@
           db.get(`~${a.user}`)
             .get("alias")
             .once((name) => {
+              a.username = name;
+            });
+          db.get(`~${a.user}`)
+            .get("alias")
+            .once((name) => {
               db.get(`~${a.user}`)
                 .get("media")
                 .get(a.id)
                 .once((media) => {
                   if (media) {
                     a.media = JSON.parse(media);
-                  }
-                });
-              a.username = name;
-              db.get(`${$userstate}upvote`)
-                .get(a.id)
-                .once((upvotes) => {
-                  if (!upvotes) {
-                    upvotes = [];
-                  }
-                  let upvote_array = [];
-                  delete upvotes._;
-                  Object.entries(upvotes).forEach(([key, value]) => {
-                    if (value) {
-                      upvote_array = [...upvote_array, key];
-                    }
-                  });
-                  a.upvotes = upvote_array;
 
-                  postids = [...postids, a.id];
-                  posts = [a, ...posts];
+                    a.username = name;
+                    db.get(`${$userstate}upvote`)
+                      .get(a.id)
+                      .once((upvotes) => {
+                        if (!upvotes) {
+                          upvotes = [];
+                        }
+                        let upvote_array = [];
+                        delete upvotes._;
+                        Object.entries(upvotes).forEach(([key, value]) => {
+                          if (value) {
+                            upvote_array = [...upvote_array, key];
+                          }
+                        });
+                        a.upvotes = upvote_array;
+
+                        postids = [...postids, a.id];
+                        posts = [a, ...posts];
+                      });
+                  }
                 });
             });
         } else {
