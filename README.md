@@ -1,101 +1,87 @@
-# reportit
+# ReportIt
 
-## Framework7 CLI Options
+## Overview
+**ReportIt** is a decentralized anonymous crime reporting app developed as part of a university hackathon. The application allows users to report crimes safely and anonymously, utilizing cutting-edge web technologies.
 
-Framework7 app created with following options:
+## Features
+- **Decentralized Reporting**: Leverages decentralized technologies for secure and anonymous reporting.
+- **Cross-Platform**: Built with Capacitor for seamless deployment on both web and Android.
 
-```
-{
-  "cwd": "C:\\Users\\Raghav\\Desktop\\reportit",
-  "type": [
-    "web",
-    "capacitor"
-  ],
-  "name": "reportit",
-  "framework": "svelte",
-  "template": "tabs",
-  "bundler": "vite",
-  "cssPreProcessor": false,
-  "theming": {
-    "customColor": true,
-    "color": "#007aff",
-    "darkMode": true,
-    "iconFonts": true
-  },
-  "customBuild": false,
-  "pkg": "com.reportit.app",
-  "capacitor": {
-    "platforms": [
-      "android"
-    ]
-  }
-}
-```
+## Tech Stack
+- **Framework**: Svelte
+- **Framework7**: For UI components and routing
+- **Capacitor**: For mobile platform support
+- **Gun.js**: For decentralized database
 
-## Install Dependencies
+## Getting Started
 
-First of all we need to install dependencies, run in terminal
+### Prerequisites
+- [Node.js](https://nodejs.org/) (>= 12.x)
+- npm (comes with Node.js)
 
-```
-npm install
-```
+### Installation
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/isitraghav/reportit.git
+   cd reportit
+   ```
 
-## NPM Scripts
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-- 🔥 `start` - run development server
-- 🔧 `dev` - run development server
-- 🔧 `build` - build web app for production
-- 📱 `build-capacitor-android` - build app and copy it to Android capacitor project
+3. Add the Android platform for Capacitor:
+   ```bash
+   npx cap add android
+   ```
 
-## Vite
-
-There is a [Vite](https://vitejs.dev) bundler setup. It compiles and bundles all "front-end" resources. You should work only with files located in `/src` folder. Vite config located in `vite.config.js`.
-
-## Capacitor
-
-This project created with Capacitor support. And first thing required before start is to add capacitor platforms, run in terminal:
-
-```
-npx cap add android
+### Running the Application
+To start the development server, use:
+```bash
+npm run dev
 ```
 
-Check out [official Capacitor documentation](https://capacitorjs.com) for more examples and usage examples.
-
-## Assets
-
-Assets (icons, splash screens) source images located in `assets-src` folder. To generate your own icons and splash screen images, you will need to replace all assets in this directory with your own images (pay attention to image size and format), and run the following command in the project directory:
-
-```
-framework7 assets
+### Building for Production
+To build the web app for production, run:
+```bash
+npm run build
 ```
 
-Or launch UI where you will be able to change icons and splash screens:
-
-```
-framework7 assets --ui
-```
-
-## Capacitor Assets
-
-Capacitor assets are located in `resources` folder which is intended to be used with `cordova-res` tool. To generate mobile apps assets run in terminal:
-
-```
-npx cordova-res
+### Building for Android
+To build the app and copy it to the Android Capacitor project, run:
+```bash
+npm run build-capacitor-android
 ```
 
-Check out [official cordova-res documentation](https://github.com/ionic-team/cordova-res) for more usage examples.
+### Assets Management
+- **Custom Icons & Splash Screens**: Replace images in the `assets-src` folder and generate new assets:
+   ```bash
+   framework7 assets
+   ```
+   or launch the UI:
+   ```bash
+   framework7 assets --ui
+   ```
+
+- **Capacitor Assets**: Generate mobile app assets:
+   ```bash
+   npx cordova-res
+   ```
 
 ## Documentation & Resources
-
 - [Framework7 Core Documentation](https://framework7.io/docs/)
-
 - [Framework7 Svelte Documentation](https://framework7.io/svelte/)
 - [Framework7 Icons Reference](https://framework7.io/icons/)
-- [Community Forum](https://forum.framework7.io)
+- [Capacitor Documentation](https://capacitorjs.com/docs)
 
-## Support Framework7
+## Contributing
+Contributions are welcome! Please fork the repository and submit a pull request.
 
-Love Framework7? Support project by donating or pledging on:
+## License
+This project is licensed under the MIT License.
 
-- Patreon: https://patreon.com/framework7
-- OpenCollective: https://opencollective.com/framework7
+## Acknowledgments
+Special thanks to the Framework7 and Capacitor communities for their support and resources.
+
+---
